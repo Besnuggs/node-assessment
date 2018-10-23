@@ -15,23 +15,27 @@ module.exports = {
         email: Return all users whose email matches.
         favorites: Return all users who have this favorite in their array of favorites. */
 
-
+        // ages, names, emails and favsArr are just the elements we are filtering through. regular syntax for filter is element ( or el) => element.something //
         if (age) {
-            let usersByAge = userData.filter(element => element.age < age)
+            console.log('age', age)
+            let usersByAge = userData.filter( ages => ages.age < age * 1)
             res.status(200).send(usersByAge)
+            console.log('user by age', usersByAge)
         } else if (lastname) {
-            let usersLastName = userData.filter(element => {
-                return element.last_name === last_name
+            console.log('last name', lastname)
+            let usersLastName = userData.filter( names => {
+                return names.last_name === last_name
             })
             res.status(200).send(usersLastName)
+            console.log('what im sending', usersLastName)
         } else if (email) {
-            let usersByEmail = userData.filter(element => {
-                return element.email === email
+            let usersByEmail = userData.filter(emails => {
+                return emails.email === email
             })
             res.status(200).send(usersByEmail)
         } else if (favorites) {
-            let usersFavorites = userData.filter(element => {
-                return element.favorites.includes(favorites)
+            let usersFavorites = userData.filter(favsArr => {
+                return favsArr.favorites.includes(favorites)
             })
             res.status(200).send(usersFavorites)
         } else {
@@ -45,10 +49,7 @@ module.exports = {
 
         let userIndex = userData.findIndex(element => element.id === id * 1)
         let userById = userData[userIndex]
-        
-        // console.log(userIndex)
-        // console.log(userById)
-        
+
         if (userById) {
             console.log('in if statement', userById)
             res.status(200).send(userById)
@@ -70,9 +71,22 @@ module.exports = {
 
     getUserByType: (req, res, next) => {
         const { type } = req.params;
-
+        
         let userType = userData.filter(element => element.type === type)
+        console.log('user type', userType)
         res.status(200).send(userType)
+
+            // if (element.type === 'user'){
+            //     return 'user'
+            // } else if ( element.type === 'moderator'){
+            //     return 'moderator'
+            // } else if ( element.type === 'admin'){
+            //     return 'admin'
+            // } else {
+
+            // res.status(200).send(userType)
+          
+            // }
     },
 
     updateUserById: (req, res, next) => {
@@ -93,7 +107,20 @@ module.exports = {
     },
 
     addUserId: (req, res, next) => {
-        
+
+        const newId = userData[userData.length -1].id + 1
+        console.log('newID', newId)
+        // body has to be defined. if i do not have this line it will be undefined; it is not = req.body. If I do that I get an error "cannot set property 'id' of undefined" 
+        let { body } = req;
+
+        // if I do not have this line the id does not get put onto the body or increment so when user object is returned it is without the new id //
+        body.id = newId;
+
+        // this is pushing the body which is the newId into the userData object //
+        userData.push(body)
+        console.log('body', body)
+
+        res.status(200).send(userData);
     },
 
     deleteUserById: (req, res, next) => {
