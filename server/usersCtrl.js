@@ -5,7 +5,7 @@ module.exports = {
     getAllUsers: (req, res) => {
 
         const age = req.query.age;
-        const lastname = req.query.last_name;
+        const lastname = req.query.lastname;
         const email = req.query.email;
         const favorites = req.query.favorites;
 
@@ -24,7 +24,7 @@ module.exports = {
         } else if (lastname) {
             console.log('last name', lastname)
             let usersLastName = userData.filter( names => {
-                return names.last_name === last_name
+                return names.last_name === lastname
             })
             res.status(200).send(usersLastName)
             console.log('what im sending', usersLastName)
